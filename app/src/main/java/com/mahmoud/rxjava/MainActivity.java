@@ -40,8 +40,11 @@ public class MainActivity extends AppCompatActivity {
         //publishSubject new observer start observe when he come
         publishSubject();
 
-        //behaviorSubject new observer start observe when he come
+        //behaviorSubject new observer start observe when he come and latest
         behaviorSubject();
+
+        //replaySubject new observer replay all data before he come and continue
+        replaySubject();
 
     }
 
@@ -86,6 +89,25 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    public void replaySubject() {
+        ReplaySubject<String> replaySubject = ReplaySubject.create();
+        replaySubject.subscribe(i-> Log.e("MainActivity","replaySubject onCreate: Student 1: "+i));
+        replaySubject.onNext("A");
+        sleep(1000);
+        replaySubject.onNext("B");
+        sleep(1000);
+        replaySubject.onNext("C");
+        sleep(1000);
+        replaySubject.onNext("D");
+        sleep(1000);
+        replaySubject.subscribe(i-> Log.e("MainActivity","replaySubject onCreate: Student 2: "+i));
+        replaySubject.onNext("E");
+        sleep(1000);
+        replaySubject.onNext("F");
+        sleep(1000);
+        replaySubject.onNext("G");
+        sleep(1000);
+    }
 
 
     public void sleep(int i){
