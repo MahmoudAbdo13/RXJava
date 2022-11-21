@@ -37,7 +37,31 @@ public class MainActivity extends AppCompatActivity {
         }
         hot.subscribe(i-> Log.e("MainActivity","hot onCreate: Student 2: "+i));
 
+        //publishSubject new observer start observe when he come
+        publishSubject();
+
     }
+
+    public void publishSubject() {
+        PublishSubject<String> subject = PublishSubject.create();
+        subject.subscribe(i-> Log.e("MainActivity","PublishSubject onCreate: Student 1: "+i));
+        subject.onNext("A");
+        sleep(1000);
+        subject.onNext("B");
+        sleep(1000);
+        subject.onNext("C");
+        sleep(1000);
+        subject.onNext("D");
+        sleep(1000);
+        subject.subscribe(i-> Log.e("MainActivity","PublishSubject onCreate: Student 2: "+i));
+        subject.onNext("E");
+        sleep(1000);
+        subject.onNext("F");
+        sleep(1000);
+        subject.onNext("G");
+        sleep(1000);
+    }
+
 
     public void sleep(int i){
         try {
