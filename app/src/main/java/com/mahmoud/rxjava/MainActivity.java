@@ -23,11 +23,15 @@ public class MainActivity extends AppCompatActivity {
 
         Observable<Long> cold = Observable.intervalRange(0, 5, 0, 1, TimeUnit.SECONDS);
         cold.subscribe(i -> Log.e("MainActivity", "cold onCreate: Student 1: " + i));
+        sleep(3000);
+        cold.subscribe(i -> Log.e("MainActivity", "cold onCreate: Student 2: " + i));
+    }
+
+    public void sleep(int i){
         try {
-            Thread.sleep(3000);
-        } catch (Exception e) {
+            Thread.sleep(i);
+        }catch (Exception e){
             e.printStackTrace();
         }
-        cold.subscribe(i -> Log.e("MainActivity", "cold onCreate: Student 2: " + i));
     }
 }
