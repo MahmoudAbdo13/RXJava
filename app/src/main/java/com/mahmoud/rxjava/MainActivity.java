@@ -40,6 +40,9 @@ public class MainActivity extends AppCompatActivity {
         //publishSubject new observer start observe when he come
         publishSubject();
 
+        //behaviorSubject new observer start observe when he come
+        behaviorSubject();
+
     }
 
     public void publishSubject() {
@@ -61,6 +64,28 @@ public class MainActivity extends AppCompatActivity {
         subject.onNext("G");
         sleep(1000);
     }
+
+    public void behaviorSubject() {
+        BehaviorSubject<String> behaviorSubject = BehaviorSubject.create();
+        behaviorSubject.subscribe(i-> Log.e("MainActivity","BehaviorSubject onCreate: Student 1: "+i));
+        behaviorSubject.onNext("A");
+        sleep(1000);
+        behaviorSubject.onNext("B");
+        sleep(1000);
+        behaviorSubject.onNext("C");
+        sleep(1000);
+        behaviorSubject.onNext("D");
+        sleep(1000);
+        behaviorSubject.subscribe(i-> Log.e("MainActivity","BehaviorSubject onCreate: Student 2: "+i));
+        behaviorSubject.onNext("E");
+        sleep(1000);
+        behaviorSubject.onNext("F");
+        sleep(1000);
+        behaviorSubject.onNext("G");
+        sleep(1000);
+
+    }
+
 
 
     public void sleep(int i){
