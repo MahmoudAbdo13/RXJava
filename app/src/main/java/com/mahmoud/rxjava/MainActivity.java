@@ -8,6 +8,7 @@ import android.util.Log;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.rxjava3.core.Observable;
+import io.reactivex.rxjava3.functions.Consumer;
 import io.reactivex.rxjava3.observables.ConnectableObservable;
 import io.reactivex.rxjava3.subjects.AsyncSubject;
 import io.reactivex.rxjava3.subjects.BehaviorSubject;
@@ -22,20 +23,20 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         Observable<Long> cold = Observable.intervalRange(0, 5, 0, 1, TimeUnit.SECONDS);
-        cold.subscribe(i -> Log.e("MainActivity", "cold onCreate: Student 1: " + i));
+        cold.subscribe(i -> Log.e("MainActivity", "cold onCreate: Student 1: " + i), Throwable::printStackTrace);
         sleep(3000);
-        cold.subscribe(i -> Log.e("MainActivity", "cold onCreate: Student 2: " + i));
+        cold.subscribe(i -> Log.e("MainActivity", "cold onCreate: Student 2: " + i), Throwable::printStackTrace);
 
         //convert cold observable to hot observable
         ConnectableObservable<Long> hot = ConnectableObservable.intervalRange(0,5,0,1, TimeUnit.SECONDS).publish();
         hot.connect();
-        hot.subscribe(i-> Log.e("MainActivity","hot onCreate: Student 1: "+i));
+        hot.subscribe(i-> Log.e("MainActivity","hot onCreate: Student 1: "+i), Throwable::printStackTrace);
         try {
             Thread.sleep(3000);
         }catch (Exception e){
             e.printStackTrace();
         }
-        hot.subscribe(i-> Log.e("MainActivity","hot onCreate: Student 2: "+i));
+        hot.subscribe(i-> Log.e("MainActivity","hot onCreate: Student 2: "+i), Throwable::printStackTrace);
 
         //publishSubject new observer start observe when he come
         publishSubject();
@@ -46,11 +47,14 @@ public class MainActivity extends AppCompatActivity {
         //replaySubject new observer replay all data before he come and continue
         replaySubject();
 
+        //replaySubject new observer observale only last data
+        asyncSubject();
+
     }
 
     public void publishSubject() {
         PublishSubject<String> subject = PublishSubject.create();
-        subject.subscribe(i-> Log.e("MainActivity","PublishSubject onCreate: Student 1: "+i));
+        subject.subscribe(i-> Log.e("MainActivity","PublishSubject onCreate: Student 1: "+i), Throwable::printStackTrace);
         subject.onNext("A");
         sleep(1000);
         subject.onNext("B");
@@ -59,7 +63,7 @@ public class MainActivity extends AppCompatActivity {
         sleep(1000);
         subject.onNext("D");
         sleep(1000);
-        subject.subscribe(i-> Log.e("MainActivity","PublishSubject onCreate: Student 2: "+i));
+        subject.subscribe(i-> Log.e("MainActivity","PublishSubject onCreate: Student 2: "+i), Throwable::printStackTrace);
         subject.onNext("E");
         sleep(1000);
         subject.onNext("F");
@@ -70,7 +74,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void behaviorSubject() {
         BehaviorSubject<String> behaviorSubject = BehaviorSubject.create();
-        behaviorSubject.subscribe(i-> Log.e("MainActivity","BehaviorSubject onCreate: Student 1: "+i));
+        behaviorSubject.subscribe(i-> Log.e("MainActivity","BehaviorSubject onCreate: Student 1: "+i), Throwable::printStackTrace);
         behaviorSubject.onNext("A");
         sleep(1000);
         behaviorSubject.onNext("B");
@@ -79,7 +83,7 @@ public class MainActivity extends AppCompatActivity {
         sleep(1000);
         behaviorSubject.onNext("D");
         sleep(1000);
-        behaviorSubject.subscribe(i-> Log.e("MainActivity","BehaviorSubject onCreate: Student 2: "+i));
+        behaviorSubject.subscribe(i-> Log.e("MainActivity","BehaviorSubject onCreate: Student 2: "+i), Throwable::printStackTrace);
         behaviorSubject.onNext("E");
         sleep(1000);
         behaviorSubject.onNext("F");
@@ -91,7 +95,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void replaySubject() {
         ReplaySubject<String> replaySubject = ReplaySubject.create();
-        replaySubject.subscribe(i-> Log.e("MainActivity","replaySubject onCreate: Student 1: "+i));
+        replaySubject.subscribe(i-> Log.e("MainActivity","replaySubject onCreate: Student 1: "+i), Throwable::printStackTrace);
         replaySubject.onNext("A");
         sleep(1000);
         replaySubject.onNext("B");
@@ -100,7 +104,7 @@ public class MainActivity extends AppCompatActivity {
         sleep(1000);
         replaySubject.onNext("D");
         sleep(1000);
-        replaySubject.subscribe(i-> Log.e("MainActivity","replaySubject onCreate: Student 2: "+i));
+        replaySubject.subscribe(i-> Log.e("MainActivity","replaySubject onCreate: Student 2: "+i), Throwable::printStackTrace);
         replaySubject.onNext("E");
         sleep(1000);
         replaySubject.onNext("F");
@@ -109,6 +113,26 @@ public class MainActivity extends AppCompatActivity {
         sleep(1000);
     }
 
+    public void asyncSubject() {
+        AsyncSubject<String> asyncSubject = AsyncSubject.create();
+        asyncSubject.subscribe(i -> Log.e("MainActivity", "AsyncSubject onCreate: Student 1: " + i), Throwable::printStackTrace);
+        asyncSubject.onNext("A");
+        sleep(1000);
+        asyncSubject.onNext("B");
+        sleep(1000);
+        asyncSubject.onNext("C");
+        sleep(1000);
+        asyncSubject.onNext("D");
+        sleep(1000);
+        asyncSubject.subscribe(i-> Log.e("MainActivity","AsyncSubject onCreate: Student 2: "+i), Throwable::printStackTrace);
+        asyncSubject.onNext("E");
+        sleep(1000);
+        asyncSubject.onNext("F");
+        sleep(1000);
+        asyncSubject.onNext("G");
+        sleep(1000);
+        asyncSubject.onComplete();
+    }
 
     public void sleep(int i){
         try {
