@@ -25,6 +25,18 @@ public class MainActivity extends AppCompatActivity {
         cold.subscribe(i -> Log.e("MainActivity", "cold onCreate: Student 1: " + i));
         sleep(3000);
         cold.subscribe(i -> Log.e("MainActivity", "cold onCreate: Student 2: " + i));
+
+        //convert cold observable to hot observable
+        ConnectableObservable<Long> hot = ConnectableObservable.intervalRange(0,5,0,1, TimeUnit.SECONDS).publish();
+        hot.connect();
+        hot.subscribe(i-> Log.e("MainActivity","hot onCreate: Student 1: "+i));
+        try {
+            Thread.sleep(3000);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        hot.subscribe(i-> Log.e("MainActivity","hot onCreate: Student 2: "+i));
+
     }
 
     public void sleep(int i){
